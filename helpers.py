@@ -1,3 +1,4 @@
+from cs50 import SQL
 import os
 import requests
 import urllib.parse
@@ -5,6 +6,11 @@ import random
 
 from flask import redirect, render_template, request, session
 from functools import wraps
+
+
+# Configure CS50 Library to use SQLite database
+db = SQL("sqlite:///squad.db")
+
 
 # initializing global variables
 pers = ["San", "Cho", "Phl", "Mel"]
@@ -24,7 +30,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if session.get("user_id") is None:
-            return redirect("/login")
+            return redirect("/admin")
         return f(*args, **kwargs)
     return decorated_function
 
@@ -41,7 +47,6 @@ def apology(message, code=400):
             s = s.replace(old, new)
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
-
 
 def dominant(per):
     per = [10, 20, 4, 45, 99] 
@@ -67,7 +72,7 @@ def dominant(per):
                 smax=per[i]
     return pers[df] + pers[ds]
 
-def savepersonality(answer, userid, duration):
+def savepersonality(answer, dur, alias):
     for ans in answer:
         if ans == 'a':
             per[0] += a['san']
@@ -95,24 +100,27 @@ def savepersonality(answer, userid, duration):
     per[1] = round((per[1]/total) * 100)
     per[2] = round((per[2]/total) * 100)
     per[3] = round((per[3]/total) * 100)
-
+    answers = "".join(answer)
     try:
         # update to personality scores db
-        db.execute("UPDATE users SET (san = :san, cho = :cho, phl = :phl, mel = :mel) WHERE id = userid", 
-                    san=per[0], cho=per[1], phl=per[2], mel=per[3], userid = userid)
+        # db.execute("UPDATE users SET (san = :san, cho = :cho, phl = :phl, mel = :mel) WHERE id = userid", 
+        #             san=per[0], cho=per[1], phl=per[2], mel=per[3], userid = userid)
+        id = db.execute("INSERT INTO users (alias, san, cho, phl, mel, answers, dur) VALUES (:alias, :san, :cho, :phl, :mel, :answers, :dur)",
+                    alias=alias, san=per[0], cho=per[1], phl=per[2], mel=per[3], answers=answers, dur=dur)
         # finding personality type
         type = dominant(per)
 
         # update personality type to db
-        db.execute("Update users SET type = :type WHERE id = :id", type=type, id=userid)
+        db.execute("Update users SET verdict = :type WHERE id = :id", type=type, id=id)
 
-        # update quiz duration
-        db.execute("Update users SET dur = :dur WHERE id = :id", dur=duration, id=userid)
-        return "done"
+        # generate key
+        key = generateKey(id)
+        db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=userid)
+        return "".join(key)
     except Exception:
-        retun "failed"
+        return "failed"
 
-def generateKey(userid):
+def generateKey(id):
     user = db.execute("SELECT * from users WHERE id = :id", id=userid)
     if len(user) not 1:
         return "Invalid UserId"
@@ -124,5 +132,4 @@ def generateKey(userid):
         chk = db.execute("SELECT * FROM users WHERE key = :key", key=key)
         if len(chk) == 0:
             b = False
-    db.execute("UPDATE users SET key = :key WHERE id = :id", id=userid)
     return key
