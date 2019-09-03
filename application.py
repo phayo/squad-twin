@@ -91,7 +91,9 @@ def admin():
     else:
         return render_template("login.html")
 
-
+@app.route("/dashboard", methods=["GET", "POST"])
+@login_required
+def dashboard():
     """Show all user data"""
     all_data = db.execute("SELECT * FROM users")
     if (len(all_data) == 0):
