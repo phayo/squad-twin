@@ -109,6 +109,19 @@ def dashboard():
     return render_template("history.html", data=all_data, l=len(history)))
 
 
+@app.route("/register", methods=["GET", "POST"])
+@login_required
+def register():
+    if request.method == "POST":
+        if not request.form.get("key") or request.form.get("password"):
+            return apology("Fill all input fields", 400)
+        rows = db.execute("SELECT * FROM users WHERE key = :key", key=request.form.get("key").strip())
+        hash = generate_password_hash(request.form.get("password").strip())
+        db.execute("UPDATE users SET (hash = :hash, status = :status) WHERE key = :key",
+                    hash=hash, status='admin' key=request.form.get("key").strip())
+        return redirect("/dashboard")
+    else:
+        render_template("register.html")
 
 
 
