@@ -70,7 +70,7 @@ def dominant(per):
             if per[i]>smax:
                 ds = i
                 smax=per[i]
-    return pers[df] + pers[ds]
+    return pers[df] + "-" + pers[ds]
 
 def savepersonality(answer, dur, alias):
     for ans in answer:
@@ -133,3 +133,19 @@ def generateKey(id):
         if len(chk) == 0:
             b = False
     return key
+
+def bestMatch(matches, control):
+    cV1 = control['verdict'].split("-")[0]
+    cV2 = control['verdict'].split("-")[1]
+
+    # get percentage of most dominant personalities of user
+    dom1 = control[cv1]
+    dom2 = control[cv2]
+
+    diff = [abs((match[cv1] - dom1) + (match[cv2] + dom2)) for match in matches]
+
+    # for match in matches:
+    #     diff.append(abs((match[cv1] - dom1) + (match[cv2] + dom2)))
+    
+    # return the element at the index with the least difference in dominant personality type
+    return matches[diff.index(min(diff))]
