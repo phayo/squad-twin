@@ -33,14 +33,78 @@ db = SQL("sqlite:///squad.db")
 
 
 @app.route("/")
-@login_required
 def index():
-    return apology("TODO")
+    return redirect("/quiz")
 
 
+@app.route("/quiz", methods=["GET", "POST"])
+def quiz()
+    if request.method == "POST":
+        if not request.form.get("answers") or not request.form.get("name") or not request.form.get("duration"):
+            return apology("Error submitting answers",)
+        try:
+            answers = list(request.form.get("answers"))
+            alias = request.form.get("name")
+            dur = request.form.get("duration")
+        except ValueError:
+            #
+        
+        key = savepersonality(answers, dur, alias)
+        render_template("key.html", key=key)
+    else:
+        questions = db.execute("SELECT * FROM questions")
+        render_template("quiz.html", questions=questions)
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE alias = :username AND status = :status",
+                          username=request.form.get("username").strip(), status="admin")
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("invalid username and/or password", 403)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # Redirect user to home page
+        return redirect("/dashboard")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("login.html")
 
 
+    """Show all user data"""
+    all_data = db.execute("SELECT * FROM users")
+    if (len(all_data) == 0):
+        return render_template("empty.html", message="No data to display")
 
+    # format USD values to money
+    for i in range(len(history)):
+        try:
+            del all_data[i]["hash"]
+        except KeyError:
+            print("Key 'testing' not found")
+
+    return render_template("history.html", data=all_data, l=len(history)))
 
 
 
