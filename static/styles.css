@@ -1,6 +1,6 @@
 body {
-    background-image: url("images/colorful.png");
-    background-color: #28a745;
+    background-image: url("https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_1280.jpg");
+    background-color: grey;
     /* #37c6574d; */
     /* rgba(53, 194, 83, 0.13); */
     opacity: 0.9;
@@ -10,13 +10,13 @@ body {
 
 .main {
     width: 50%;
-    background-color: #dcffdc;
+    background-color: #fff;
     margin-left: auto;
     margin-right: auto;
 }
 
 .sec {
-    margin-top: 20%;
+    margin-top: 10%;
     color: #fff;
     text-align: center;
 }
@@ -27,11 +27,10 @@ body {
 }
 
 .btni {
-    display: flex;
-    justify-content: center;
+    display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 15%;
+    width: 10em;
 }
 
 hr {
@@ -40,9 +39,22 @@ hr {
 }
 
 .admin {
-  height: 80vh;
+    height: 80vh;
 }
 
 .sidebar {
-  background-color: #007bff;
+    background-color: #007bff;
+}
+
+.navbar-brand {
+    color: rgb(254, 75, 40) !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: 'Pacifico', cursive;
+}
+
+.nav-link {
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 1.2rem;
 }
