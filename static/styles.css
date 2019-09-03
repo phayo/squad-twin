@@ -38,3 +38,11 @@ hr {
     border-top: 8px solid #fff;
     width: 8rem;
 }
+
+.admin {
+  height: 80vh;
+}
+
+.sidebar {
+  background-color: #007bff;
+}

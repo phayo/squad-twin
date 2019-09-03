@@ -167,7 +167,6 @@ def dashboard():
     all_data = db.execute("SELECT * FROM users")
     if (len(all_data) == 0):
         return render_template("empty.html", message="No data to display")
-
     # format USD values to money
     for i in range(len(history)):
         try:
