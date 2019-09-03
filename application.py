@@ -37,6 +37,10 @@ db = SQL("sqlite:///squad.db")
 def index():
     return apology("TODO")
 
+@app.route("/admin")
+def admin():
+    return render_template("admin.html")
+
 
 
 
