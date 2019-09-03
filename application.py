@@ -219,6 +219,32 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+@app.route("/verdict", methods=["GET", "POST"])
+def verdict():
+    if request.method == "POST":
+        if not request.form.get("key"):
+            return apology("Enter a valid key", 400)
+        key = request.form.get("key")
+
+        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=key)
+        if not len(user_row) == 1:
+            return apology("Invalid key", 400)
+        verdict = user_row[0]['verdict']
+
+        # find best match
+        match = db.execute("SELECT * FROM users WHERE verdict LIKE :type", type=verdict)
+        if len(match) == 0:
+            match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[0])
+            if len(match) == 0:
+                match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[1])
+        
+        if len(match) == 1:
+            return render_template("match.html", match=match[0])
+        
+        return render_template("match.html", match=bestMatch(match, user_row[0]))
+    else:
+        return render_template("verdict.html")
+
 
 
 
