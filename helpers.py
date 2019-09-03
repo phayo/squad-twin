@@ -9,7 +9,7 @@ from functools import wraps
 
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///squad.db")
+#db = SQL("sqlite:///squad.db")
 
 
 # initializing global variables
@@ -122,7 +122,7 @@ def savepersonality(answer, dur, alias):
 
 def generateKey(id):
     user = db.execute("SELECT * from users WHERE id = :id", id=userid)
-    if len(user) not 1:
+    if not len(user) == 1:
         return "Invalid UserId"
     if not user['verdict']:
         return "User has not taken the test"

@@ -8,7 +8,7 @@ body {
     background-size: cover;
 }
 
-main {
+.main {
     width: 50%;
     background-color: #dcffdc;
     margin-left: auto;
