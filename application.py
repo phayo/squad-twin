@@ -121,8 +121,8 @@ def quiz():
         key = savepersonality(answers, dur, alias)
         render_template("key.html", key=key)
     else:
-        questions = db.execute("SELECT * FROM questions")
-        render_template("quiz.html", questions=questions)
+        #questions = db.execute("SELECT * FROM questions")
+        render_template("quiz.html")#, questions=questions)
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
@@ -142,13 +142,13 @@ def admin():
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        # Query database for username
+        # Query database for key
         rows = db.execute("SELECT * FROM users WHERE key = :key AND status = :status",
-                          username=request.form.get("key").strip(), status="admin")
+                          key=request.form.get("key").strip(), status="admin")
 
-        # Ensure username exists and password is correct
+        # Ensure key exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid key and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -167,14 +167,15 @@ def dashboard():
     all_data = db.execute("SELECT * FROM users")
     if (len(all_data) == 0):
         return render_template("empty.html", message="No data to display")
+
     # format USD values to money
-    for i in range(len(history)):
+    for i in range(len(all_data)):
         try:
             del all_data[i]["hash"]
         except KeyError:
             print("Key 'testing' not found")
 
-    return render_template("history.html", data=all_data, l=len(history))
+    return render_template("admin.html")#, data=all_data, l=len(history))
 
 
 @app.route("/register", methods=["GET", "POST"])
