@@ -1,0 +1,40 @@
+body {
+    background-image: url("images/colorful.png");
+    background-color: #28a745;
+    /* #37c6574d; */
+    /* rgba(53, 194, 83, 0.13); */
+    opacity: 0.9;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+main {
+    width: 50%;
+    background-color: #dcffdc;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sec {
+    margin-top: 20%;
+    color: #fff;
+    text-align: center;
+}
+
+.ih1 {
+    font-weight: 800;
+    font-size: 3rem;
+}
+
+.btni {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 15%;
+}
+
+hr {
+    border-top: 8px solid #fff;
+    width: 8rem;
+}
