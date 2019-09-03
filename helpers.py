@@ -112,7 +112,7 @@ def savepersonality(answer, userid, duration):
     except Exception:
         retun "failed"
 
-
+def generateKey(userid):
     user = db.execute("SELECT * from users WHERE id = :id", id=userid)
     if len(user) not 1:
         return "Invalid UserId"
