@@ -135,16 +135,16 @@ def admin():
     if request.method == "POST":
 
         # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
+        if not request.form.get("key"):
+            return apology("must provide key", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE alias = :username AND status = :status",
-                          username=request.form.get("username").strip(), status="admin")
+        rows = db.execute("SELECT * FROM users WHERE key = :key AND status = :status",
+                          username=request.form.get("key").strip(), status="admin")
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
@@ -188,6 +188,7 @@ def register():
         hash = generate_password_hash(request.form.get("password").strip())
         db.execute("UPDATE users SET (hash = :hash, status = :status) WHERE key = :key",
                     hash=hash, status='admin', key=request.form.get("key").strip())
+        session["user_id"] = userid
         return redirect("/dashboard")
     else:
         render_template("register.html")
