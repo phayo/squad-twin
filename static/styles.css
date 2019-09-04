@@ -58,3 +58,26 @@ hr {
     font-weight: 600;
     font-size: 1.2rem;
 }
+
+.form {
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 5em;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.qlabel {
+    margin-top: 1rem;
+}
+
+.option {
+    margin: 0.5rem auto;
+}
+
+.abtnl {
+    display: block;
+    margin: 3rem auto;
+}
