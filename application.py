@@ -5,7 +5,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required
+from helpers import apology, login_required, bestMatch
 
 # Configure application
 app = Flask(__name__)
@@ -122,7 +122,7 @@ def quiz():
         render_template("key.html", key=key)
     else:
         #questions = db.execute("SELECT * FROM questions")
-        render_template("quiz.html")#, questions=questions)
+        return render_template("quiz.html")#, questions=questions)
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
@@ -177,6 +177,22 @@ def dashboard():
 
     return render_template("admin.html")#, data=all_data, l=len(history))
 
+@app.route("/question", methods=["GET", "POST"])
+@login_required
+def question():
+    if request.method == "POST":
+        que = request.form.get("que")
+        a = request.form.get("a")
+        b = request.form.get("b")
+        c = request.form.get("c")
+        d = request.form.get("d")
+        if not que or not a or not b or not c or not d:
+            return apology("Fill all inputs", 400)
+        db.execute("INSERT INTO questions (question, a , b , c , d) VALUES (:que, :a, :b, :c, :d)",
+                    que=que.strip(), a=a.strip(), b=b.strip(), c=c.strip(), d=d.strip())
+        return render_template("quiz.html", added="added")
+    else:
+        return render_template("quiz.html")
 
 @app.route("/register", methods=["GET", "POST"])
 @login_required
@@ -191,9 +207,43 @@ def register():
         session["user_id"] = userid
         return redirect("/dashboard")
     else:
-        render_template("register.html")
+        return render_template("register.html")
 
+@app.route("/logout")
+def logout():
+    """Log user out"""
 
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+@app.route("/verdict", methods=["GET", "POST"])
+def verdict():
+    if request.method == "POST":
+        if not request.form.get("key"):
+            return apology("Enter a valid key", 400)
+        key = request.form.get("key")
+
+        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=key)
+        if not len(user_row) == 1:
+            return apology("Invalid key", 400)
+        verdict = user_row[0]['verdict']
+
+        # find best match
+        match = db.execute("SELECT * FROM users WHERE verdict LIKE :type", type=verdict)
+        if len(match) == 0:
+            match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[0])
+            if len(match) == 0:
+                match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[1])
+        
+        if len(match) == 1:
+            return render_template("match.html", match=match[0])
+        
+        return render_template("match.html", match=bestMatch(match, user_row[0]))
+    else:
+        return render_template("verdict.html")
 
 
 
