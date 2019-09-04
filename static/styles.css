@@ -1,4 +1,5 @@
 body {
+=
     background-image: url("https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_1280.jpg");
     background-color: grey;
     /* #37c6574d; */
@@ -22,8 +23,8 @@ body {
 }
 
 .ih1 {
-    font-weight: 800;
-    font-size: 3rem;
+  font-weight: 800;
+  font-size: 3rem;
 }
 
 .btni {
@@ -34,12 +35,23 @@ body {
 }
 
 hr {
-    border-top: 8px solid #fff;
-    width: 8rem;
+  border-top: 8px solid #fff;
+  width: 8rem;
 }
 
 .admin {
+
     height: 80vh;
+}
+.mb-3 {
+  text-align: center;
+  color: #fff;
+  font-weight: bolder;
+}
+
+.card-body {
+  /* scroll horizontally as needed */
+  overflow-x: auto;
 }
 
 .sidebar {

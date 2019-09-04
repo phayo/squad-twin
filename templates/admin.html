@@ -1,22 +1,10 @@
 {% extends "layout.html" %} {% block title %} Admin Panel {% endblock %} {%
 block main %}
-<section class="admin row">
-  <aside class="col-2 sidebar">
-    <div class="list-group">
-      <a href="/admin" class="list-group-item list-group-item-action active">
-        View Users
-      </a>
-      <a href="/register" class="list-group-item list-group-item-action"
-        >Register admin</a
-      >
-      <a href="/questions" class="list-group-item list-group-item-action"
-        >Add Questions</a
-      >
-    </div>
-  </aside>
-  <section class="col-10 content">
-    <h1 class="mb-3">All Users</h1>
-    <table class="table table-striped">
+
+<h1 class="mb-3">All Users</h1>
+<section class="card">
+  <div class="card-body">
+    <table class="display" id="table_id">
       <thead>
         <tr>
           <th scope="col">S/N</th>
@@ -72,6 +60,17 @@ block main %}
         </tr>
       </tbody>
     </table>
-  </section>
+  </div>
 </section>
+
+<script
+  type="text/javascript"
+  charset="utf8"
+  src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"
+></script>
+<script>
+  $(document).ready(function() {
+    $("#table_id").DataTable();
+  });
+</script>
 {% endblock %}
