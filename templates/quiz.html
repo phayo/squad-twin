@@ -125,57 +125,66 @@
     </div>
 </main>
 <script type="text/javascript">
-        var quizSteps = $("#quizzie .quiz-step"),
+    var quizSteps = $("#quizzie .quiz-step"),
         totalScore = [];
-        
-      // for each step in the quiz, add the selected answer value to the total score
-      // toggle a visual active state to show which option has been selected
-      quizSteps.each(function() {
+
+    // for each step in the quiz, add the selected answer value to the total score
+    // toggle a visual active state to show which option has been selected
+    quizSteps.each(function () {
         var currentStep = $(this),
-          ansOpts = currentStep.children(".quiz-answer");
+            ansOpts = currentStep.children(".quiz-answer");
         // for each option per step, add a click listener
         // apply active class and calculate the total score
-        ansOpts.each(function() {
-          var eachOpt = $(this);
-          eachOpt[0].addEventListener("click", check, false);
-          function check() {
-            var $this = $(this),
-              value = $this.attr("data-quizIndex"),
-              answerScore = value;
-              // check to see if an answer was previously selected
-            if (currentStep.children(".active").length > 0) {
-              var wasActive = currentStep.children(".active"),
-                oldScoreValue = wasActive.attr("data-quizIndex"),
-                oldScore = oldScoreValue;
-              // handle visual active state
-              currentStep.children(".active").removeClass("active");
-              $this.addClass("active");
-              // handle the score calculation
-              totalScore.push(oldScoreValue);
-              totalScore.push(answerScore);
-              console.log(totalScore);
-              calcResults(totalScore);
-            } else {
-              // handle visual active state
-              $this.addClass("active");
-              // handle score calculation
-              totalScore.push(answerScore);
-              console.log(totalScore);
-              calcResults(totalScore);
-              // handle current step
-              updateStep(currentStep);
+        ansOpts.each(function () {
+            var eachOpt = $(this);
+            eachOpt[0].addEventListener("click", check, false);
+
+            function check() {
+                var $this = $(this),
+                    value = $this.attr("data-quizIndex"),
+                    answerScore = value;
+                // check to see if an answer was previously selected
+                if (currentStep.children(".active").length > 0) {
+                    var wasActive = currentStep.children(".active"),
+                        oldScoreValue = wasActive.attr("data-quizIndex"),
+                        oldScore = oldScoreValue;
+                    // handle visual active state
+                    currentStep.children(".active").removeClass("active");
+                    $this.addClass("active");
+                    // handle the score calculation
+                    totalScore.push(oldScoreValue);
+                    totalScore.push(answerScore);
+                    console.log(totalScore);
+                    calcResults(totalScore);
+                } else {
+                    // handle visual active state
+                    $this.addClass("active");
+                    // handle score calculation
+                    totalScore.push(answerScore);
+                    console.log(totalScore);
+                    calcResults(totalScore);
+                    // handle current step
+                    updateStep(currentStep);
+                }
             }
-          }
         });
-      });
+    });
 
-      // show current step/hide other steps
-      function updateStep(currentStep) {
+    // show current step/hide other steps
+    function updateStep(currentStep) {
         if (currentStep.hasClass("current")) {
-          currentStep.removeClass("current");
-          currentStep.next().addClass("current");
+            currentStep.removeClass("current");
+            currentStep.next().addClass("current");
         }
-      }
+    }
 
+    // display personality key
+    function calcResults(totalScore) {
+        // only update the results div if all questions have been answered
+        if (quizSteps.find(".active").length == quizSteps.length) {
+            var resultsTitle = $("#results h1"),
+                resultsDesc = $("#results .desc");
+        }
+    }
 </script>
 {% endblock %}
