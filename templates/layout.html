@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 
 <html lang="en">
-
-
 <head>
 
   <!-- Required meta tags -->
@@ -14,6 +12,11 @@
 
   <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
   <link href="/static/favicon.ico" rel="icon">
+  <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css"
+    />
   <link href="https://fonts.googleapis.com/css?family=Lobster|Pacifico|Righteous&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Satisfy|Pathway+Gothic+One" rel="stylesheet">
   <link href="/static/styles.css" rel="stylesheet">
@@ -31,7 +34,7 @@
   <header>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
-      <a class="navbar-brand" href="index.html">SQUAD<span class="text-white">TWIN</span></a>
+      <a class="navbar-brand" href="/">SQUAD<span class="text-white">TWIN</span></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -39,28 +42,30 @@
 
       <div class="collapse navbar-collapse" id="navbar">
         {% if session.user_id %}
-        <ul class="navbar-nav mr-auto mt-2">
+        <!-- <ul class="navbar-nav ml-auto mt-2">
+          
+        </ul> -->
+        <ul class="navbar-nav ml-auto mt-2 ">
           <li class="nav-item"><a class="nav-link" href="/questions">Add Questions</a></li>
           <li class="nav-item"><a class="nav-link" href="/register">Add admin</a></li>
-        </ul>
-        <ul class="navbar-nav ml-auto mt-2">
           <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
         </ul>
         {% else %}
         <ul class="navbar-nav ml-auto mt-2">
-          <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+          <li class="nav-item"><a class="nav-link" href="/admin">Log In</a></li>
         </ul>
         {% endif %}
       </div>
     </nav>
     </nav>
   </header>
+  <main class="mt-5">
+    {% block main %}
 
 
-  {% block body %}
+    {% endblock %}
 
-  {% endblock %}
-
+  </main>
 
   <!-- <footer class="small text-center text-muted">
     Data provided for free by <a href="https://iextrading.com/developer">IEX</a>. View <a

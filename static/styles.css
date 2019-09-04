@@ -22,8 +22,8 @@ body {
 }
 
 .ih1 {
-    font-weight: 800;
-    font-size: 3rem;
+  font-weight: 800;
+  font-size: 3rem;
 }
 
 .btni {
@@ -34,12 +34,27 @@ body {
 }
 
 hr {
-    border-top: 8px solid #fff;
-    width: 8rem;
+  border-top: 8px solid #fff;
+  width: 8rem;
 }
 
 .admin {
+
     height: 80vh;
+}
+.mb-3 {
+  text-align: center;
+  color: #fff;
+  font-weight: bolder;
+}
+
+.card{
+    background-color: #ddd;
+}
+
+.card-body {
+  /* scroll horizontally as needed */
+  overflow-x: auto;
 }
 
 .sidebar {
@@ -54,9 +69,134 @@ hr {
 }
 
 .nav-link {
-    color: #fff !important;
+    color: #ddd !important;
     font-weight: 600;
     font-size: 1.2rem;
+}
+
+#quizzie {
+    padding: 3% 0;
+}
+
+.ul {
+    list-style: none;
+    display: block;
+    width: auto;
+    margin: 2% 2%;
+    padding: 2%;
+    overflow: auto;
+    display: none;
+}
+
+.current {
+    display: block;
+}
+
+.li {
+    display: inline-block;
+    float: left;
+    width: 49%;
+    margin-right: 2%;
+    overflow: auto;
+    text-align: center;
+}
+
+.quiz-answer {
+    cursor: pointer;
+}
+
+.question {
+    display: block;
+    float: none;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 2%;
+}
+
+.results-inner {
+    padding: 5% 2%;
+}
+
+.li:last-child {
+    margin-right: 0;
+}
+
+.question-wrap {
+    display: block;
+    padding: 1%;
+    margin: 0.2em 10%;
+}
+
+.answer-wrap {
+    background: #fe7558;
+    border-radius: 10px;
+}
+
+.answer-wrap:hover {
+    background: #f65f3f;
+    border-radius: 10px;
+}
+
+.anli {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.anul {
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.qimg {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 4%;
+    height: 4%;
+    border-radius: 50%;
+}
+
+/* qh1 {
+    text-align: center;
+    color: #fff;
+} */
+
+h1 {
+    font-family: 'Satisfy', 'cursive';
+    font-size: 2.5em;
+}
+
+h2,
+p {
+    font-family: 'Pathway Gothic One', 'sans-serif';
+    font-size: 2em;
+}
+
+h1,
+h2,
+p {
+    text-align: center;
+    display: block;
+    width: auto;
+    margin: 1%;
+    color: #fff;
+}
+
+.login {
+    max-width: 400px;
+}
+
+.btn-orange {
+    background-color: #f9492f;
+    color: #fff;
+}
+
+.btn-orange:hover {
+    background-color: #79190a;
 }
 
 .form {
