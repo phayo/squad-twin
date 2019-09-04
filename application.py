@@ -190,9 +190,9 @@ def question():
             return apology("Fill all inputs", 400)
         db.execute("INSERT INTO questions (question, a , b , c , d) VALUES (:que, :a, :b, :c, :d)",
                     que=que.strip(), a=a.strip(), b=b.strip(), c=c.strip(), d=d.strip())
-        return render_template("quiz.html", added="added")
+        return render_template("questions.html", added="added")
     else:
-        return render_template("quiz.html")
+        return render_template("questions.html")
 
 @app.route("/register", methods=["GET", "POST"])
 @login_required
