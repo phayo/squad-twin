@@ -135,5 +135,47 @@
           ansOpts = currentStep.children(".quiz-answer");
         // for each option per step, add a click listener
         // apply active class and calculate the total score
+        ansOpts.each(function() {
+          var eachOpt = $(this);
+          eachOpt[0].addEventListener("click", check, false);
+          function check() {
+            var $this = $(this),
+              value = $this.attr("data-quizIndex"),
+              answerScore = value;
+              // check to see if an answer was previously selected
+            if (currentStep.children(".active").length > 0) {
+              var wasActive = currentStep.children(".active"),
+                oldScoreValue = wasActive.attr("data-quizIndex"),
+                oldScore = oldScoreValue;
+              // handle visual active state
+              currentStep.children(".active").removeClass("active");
+              $this.addClass("active");
+              // handle the score calculation
+              totalScore.push(oldScoreValue);
+              totalScore.push(answerScore);
+              console.log(totalScore);
+              calcResults(totalScore);
+            } else {
+              // handle visual active state
+              $this.addClass("active");
+              // handle score calculation
+              totalScore.push(answerScore);
+              console.log(totalScore);
+              calcResults(totalScore);
+              // handle current step
+              updateStep(currentStep);
+            }
+          }
+        });
+      });
+
+      // show current step/hide other steps
+      function updateStep(currentStep) {
+        if (currentStep.hasClass("current")) {
+          currentStep.removeClass("current");
+          currentStep.next().addClass("current");
+        }
+      }
+
 </script>
 {% endblock %}
