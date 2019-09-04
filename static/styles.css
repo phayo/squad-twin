@@ -58,3 +58,80 @@ hr {
     font-weight: 600;
     font-size: 1.2rem;
 }
+
+#quizzie {
+    padding: 5% 0;
+}
+
+.ul {
+    list-style: none;
+    display: block;
+    width: auto;
+    margin: 2% 2%;
+    padding: 2%;
+    overflow: auto;
+    display: none;
+}
+
+.current {
+    display: block;
+}
+
+.li {
+    display: inline-block;
+    float: left;
+    width: 49%;
+    margin-right: 2%;
+    overflow: auto;
+    text-align: center;
+}
+
+.quiz-answer {
+    cursor: pointer;
+}
+
+.question {
+    display: block;
+    float: none;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 2%;
+}
+
+.results-inner {
+    padding: 5% 2%;
+}
+
+.li:last-child {
+    margin-right: 0;
+}
+
+.question-wrap {
+    display: block;
+    padding: 1%;
+    margin: 1em 10%;
+}
+
+.answer-wrap {
+    background: #fe7558;
+    border-radius: 10px;
+}
+
+.answer-wrap:hover {
+    background: #f65f3f;
+    border-radius: 10px;
+}
+
+.anli {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.anul {
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
