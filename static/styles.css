@@ -1,5 +1,4 @@
 body {
-=
     background-image: url("https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_1280.jpg");
     background-color: grey;
     /* #37c6574d; */
@@ -49,6 +48,10 @@ hr {
   font-weight: bolder;
 }
 
+.card{
+    background-color: #ddd;
+}
+
 .card-body {
   /* scroll horizontally as needed */
   overflow-x: auto;
@@ -66,7 +69,7 @@ hr {
 }
 
 .nav-link {
-    color: #fff !important;
+    color: #ddd !important;
     font-weight: 600;
     font-size: 1.2rem;
 }
@@ -181,4 +184,17 @@ p {
     width: auto;
     margin: 1%;
     color: #fff;
+}
+
+.login {
+    max-width: 400px;
+}
+
+.btn-orange {
+    background-color: #f9492f;
+    color: #fff;
+}
+
+.btn-orange:hover {
+    background-color: #79190a;
 }
