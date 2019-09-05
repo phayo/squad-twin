@@ -249,6 +249,9 @@ def verdict():
         return render_template("verdict.html")
 
 
+@app.route("/result")
+def show_result():
+    return render_template("result.html")
 
 
 
