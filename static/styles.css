@@ -22,8 +22,8 @@ body {
 }
 
 .ih1 {
-  font-weight: 800;
-  font-size: 3rem;
+    font-weight: 800;
+    font-size: 3rem;
 }
 
 .btni {
@@ -34,27 +34,28 @@ body {
 }
 
 hr {
-  border-top: 8px solid #fff;
-  width: 8rem;
+    border-top: 8px solid #fff;
+    width: 8rem;
 }
 
 .admin {
 
     height: 80vh;
 }
+
 .mb-3 {
-  text-align: center;
-  color: #fff;
-  font-weight: bolder;
+    text-align: center;
+    color: #fff;
+    font-weight: bolder;
 }
 
-.card{
+.card {
     background-color: #ddd;
 }
 
 .card-body {
-  /* scroll horizontally as needed */
-  overflow-x: auto;
+    /* scroll horizontally as needed */
+    overflow-x: auto;
 }
 
 .sidebar {
@@ -220,4 +221,22 @@ p {
 .abtnl {
     display: block;
     margin: 3rem auto;
+}
+
+.form-control-file-label {
+    float: left;
+}
+
+.niform {
+    padding: 30px;
+}
+
+.ph1 {
+    margin-top: 7em;
+}
+
+.kbtn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
