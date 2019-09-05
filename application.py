@@ -230,9 +230,14 @@ def result():
     if request.method == "POST":
         if not request.form.get("key"):
             return apology("Enter a valid key", 400)
-        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=request.form.get("key").strip())
+        try:
+            key = int(request.form.get("key").strip())
+        except ValueError:
+            return apology("Enter a valid key", 400)
+        
+        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=key)
         if not len(user_row) == 1:
-            return apology("Invalid key", 400)
+            return apology("Key does ot exist", 400)
         verdict = user_row[0]['verdict']
 
         # find best match
