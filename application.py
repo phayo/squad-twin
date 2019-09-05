@@ -249,7 +249,6 @@ def result():
         
         if len(match) == 1:
             return render_template("result.html", user=user_row[0], match=match[0])
-        
         return render_template("result.html", user=user_row[0], match=bestMatch(match, user_row[0]))
 
 @app.route("/key", methods=["POST"])
@@ -270,7 +269,6 @@ def key():
             db.execute("UPDATE users SET alias = :alias WHERE key = :key", 
                         alias=request.form.get("name").strip(), key=request.form.get("key"))
             return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   
-
 
 
 
