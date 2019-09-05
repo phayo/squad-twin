@@ -4,8 +4,9 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+import random
 
-from helpers import apology, login_required, bestMatch
+from helpers import apology, login_required, bestMatch, dominant
 
 # Configure application
 app = Flask(__name__)
@@ -82,13 +83,13 @@ def savepersonality(answer, dur, alias):
 
         # generate key
         key = generateKey(id)
-        db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=userid)
+        db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=id)
         return "".join(key)
     except Exception:
         return "failed"
 
 def generateKey(id):
-    user = db.execute("SELECT * from users WHERE id = :id", id=userid)
+    user = db.execute("SELECT * from users WHERE id = :id", id=id)
     if not len(user) == 1:
         return "Invalid UserId"
     if not user['verdict']:
@@ -109,6 +110,7 @@ def index():
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
     if request.method == "POST":
+        print("Entered o")
         if not request.form.get("answers") or not request.form.get("name") or not request.form.get("duration"):
             return apology("Error submitting answers",)
         try:
@@ -119,10 +121,11 @@ def quiz():
             return apology("TODO", 400)
         
         key = savepersonality(answers, dur, alias)
-        render_template("key.html", key=key)
+        return render_template("key.html", key=key)
     else:
-        #questions = db.execute("SELECT * FROM questions")
-        return render_template("quiz.html")#, questions=questions)
+        questions = db.execute("SELECT * FROM questions")
+        print(questions)
+        return render_template("quiz.html", questions=questions)
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
@@ -204,7 +207,7 @@ def register():
         hash = generate_password_hash(request.form.get("password").strip())
         db.execute("UPDATE users SET (hash = :hash, status = :status) WHERE key = :key",
                     hash=hash, status='admin', key=request.form.get("key").strip())
-        session["user_id"] = userid
+        #session["user_id"] = userid
         return redirect("/dashboard")
     else:
         return render_template("register.html")

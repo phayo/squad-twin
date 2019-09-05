@@ -3,29 +3,29 @@
 {% block main %}
 <section>
         <h2 class="text-white text-center pt-5 mt-5 pb-5">Add Personality Question</h2>
-            <form class="form">
-                    <div class="form-group">
-                      <label for="exampleInputText1" class="qlabel">Question</label>
-                      <input type="text" class="form-control" id="exampleInputText1" aria-describedby="textHelp" placeholder="Enter your question">
-                    </div>
-                    <label for="exampleInputPassword1">Enter Your Options</label>
-                    <div class="row option">
-                          <div class="col">
-                            <input type="text" class="form-control" placeholder="Option A">
-                          </div>
-                          <div class="col">
-                            <input type="text" class="form-control" placeholder="Option B">
-                          </div>
-                        </div>
-                        <div class="row option">
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Option C">
-                              </div>
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Option D">
-                              </div>
-                            </div>
-                            <button type="submit" class="btn btn-outline-light abtnl">Submit</button>
-                        </form>
+            <form class="form" action="/question" method="POST">
+              <div class="form-group">
+                <label for="exampleInputText1" class="qlabel">Question</label>
+                <input type="text" class="form-control" name="que" id="exampleInputText1" aria-describedby="textHelp" placeholder="Enter your question">
+              </div>
+              <label for="exampleInputPassword1">Enter Your Options</label>
+              <div class="row option">
+                  <div class="col">
+                    <input type="text" class="form-control" name="a" placeholder="Option A">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control"  name="b" placeholder="Option B">
+                  </div>
+                </div>
+              <div class="row option">
+                  <div class="col">
+                    <input type="text" class="form-control"  name="c" placeholder="Option C">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control"  name="d" placeholder="Option D">
+                  </div>
+              </div>
+              <button type="submit" class="btn btn-outline-light abtnl">Submit</button>
+            </form>
           </section>
 {% endblock %}

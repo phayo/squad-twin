@@ -5,123 +5,44 @@
 <div id="quizzie" class="anul">
     <img src="https://derpicdn.net/img/2018/2/23/1663275/large.gif" class="qimg">
     <h1 class="qh1 pb-3">Who is your squadtwin?</h1>
-
-    <ul class="quiz-step ul step1 current">
-        {% for question in questions %}
-        <li class="question li">
-            <div class="question-wrap">
-                <h2>Question #1: {{ question['question'] }}</h2>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="a">
-            <div class="answer-wrap">
-                <p class="answer-text">{{ question['a'] }}</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
-            <div class="answer-wrap">
-                <p class="answer-text">{{ question['b'] }}</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
-            <div class="answer-wrap">
-                <p class="answer-text">{{ question['c'] }}</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
-            <div class="answer-wrap">
-                <p class="answer-text">{{ question['d'] }}</p>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-    <!-- <ul class="quiz-step ul step2">
-        <li class="question li">
-            <div class="question-wrap">
-                <p>Question #2: Are you more...</p>
-            </div>
-        </li>
-        <li class="quiz-answer anli li pr-2 pb-3" data-quizIndex="a">
-            <div class="answer-wrap">
-                <p class="answer-text">First Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
-            <div class="answer-wrap">
-                <p class="answer-text">Second Thing</p>
-            </div>
-        </li>
-
-        <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
-            <div class="answer-wrap">
-                <p class="answer-text">First Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
-            <div class="answer-wrap">
-                <p class="answer-text">Second Thing</p>
-            </div>
-        </li>
-    </ul>
-    <ul class="quiz-step ul step3">
-        <li class="question li">
-            <div class="question-wrap">
-                <p>Question #3: Are you more...</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="a">
-            <div class="answer-wrap">
-                <p class="answer-text">One Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
-            <div class="answer-wrap">
-                <p class="answer-text">Another Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
-            <div class="answer-wrap">
-                <p class="answer-text">One Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
-            <div class="answer-wrap">
-                <p class="answer-text">Another Thing</p>
-            </div>
-        </li>
-    </ul>
-    <ul class="quiz-step ul step4">
-        <li class="question li">
-            <div class="question-wrap">
-                <p>Question #4: Are you more...</p>
-            </div>
-        </li>
-        <li class="quiz-answer anli li pr-2 pb-3" data-quizIndex="a">
-            <div class="answer-wrap">
-                <p class="answer-text">One Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
-            <div class="answer-wrap">
-                <p class="answer-text">Another Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="c">
-            <div class="answer-wrap">
-                <p class="answer-text">One Thing</p>
-            </div>
-        </li>
-        <li class="quiz-answerli anli pl-2 pb-3" data-quizIndex="d">
-            <div class="answer-wrap">
-                <p class="answer-text">Another Thing</p>
-            </div>
-        </li>
-    </ul> -->
-    <ul id="results" class="ul">
-        <li class="results-inner li">
-            <p>Your Personality Key is:</p>
+    {% for question in questions %}
+        {% if questions.index(question) == 0 %}
+        <ul class="quiz-step ul step1 current">
+        {% else %}
+        <ul class="quiz-step ul step1">
+        {% endif %}
+            <li class="question li">
+                <div class="question-wrap">
+                    <h2>Question # {{ question['id'] }}: {{ question['question'] }}</h2>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="a">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['a'] }}</p>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['b'] }}</p>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['c'] }}</p>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['d'] }}</p>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+    <ul id="results" class="justify-content-center ul">
+        <li class="results-inner li w-100">
+            <h6 class="display-2 text-white key">1111</h6>
             <p>Use your unique personality key to see your squad twin.</p>
-            <Button class="desc btn btn-outline-light">Click Here</Button>
+            <Button class="desc btn btn-outline-light"><a href="/result">Click Here</a></Button>
         </li>
     </ul>
 </div>
@@ -183,9 +104,24 @@
     function calcResults(totalScore) {
         // only update the results div if all questions have been answered
         if (quizSteps.find(".active").length == quizSteps.length) {
-            var resultsTitle = $("#results p"),
-                resultsDesc = $("#results .desc");
+            $.ajax({
+                url: "/quiz",
+                data: {
+                    answers: totalScore,
+                    name: $("#name").val()
+                },
+                method: "POST",
+                success: function(key){
+                    console.log("success")
+                    // var resultsTitle = $("#results p"),
+                    // resultsDesc = $("#results .desc");
+                    $(".key").text(key);
+                }
+                
+            });
+            
         }
     }
+
 </script>
 {% endblock %}

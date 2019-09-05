@@ -72,71 +72,71 @@ def dominant(per):
                 smax=per[i]
     return pers[df] + "-" + pers[ds]
 
-def savepersonality(answer, dur, alias):
-    for ans in answer:
-        if ans == 'a':
-            per[0] += a['san']
-            per[1] += a['cho']
-            per[2] += a['phl']
-            per[3] += a['mel']
-        elif ans == 'b':
-            per[0] += b['san']
-            per[1] += b['cho']
-            per[2] += b['phl']
-            per[3] += b['mel']
-        elif ans == 'c':
-            per[0] += c['san']
-            per[1] += c['cho']
-            per[2] += c['phl']
-            per[3] += c['mel']
-        else:
-            per[0] += d['san']
-            per[1] += d['cho']
-            per[2] += d['phl']
-            per[3] += d['mel']
-    total = sum(per)
-    # finding personality score
-    per[0] = round((per[0]/total) * 100)
-    per[1] = round((per[1]/total) * 100)
-    per[2] = round((per[2]/total) * 100)
-    per[3] = round((per[3]/total) * 100)
-    answers = "".join(answer)
-    try:
-        # update to personality scores db
-        # db.execute("UPDATE users SET (san = :san, cho = :cho, phl = :phl, mel = :mel) WHERE id = userid", 
-        #             san=per[0], cho=per[1], phl=per[2], mel=per[3], userid = userid)
-        id = db.execute("INSERT INTO users (alias, san, cho, phl, mel, answers, dur) VALUES (:alias, :san, :cho, :phl, :mel, :answers, :dur)",
-                    alias=alias, san=per[0], cho=per[1], phl=per[2], mel=per[3], answers=answers, dur=dur)
-        # finding personality type
-        type = dominant(per)
+# def savepersonality(answer, dur, alias):
+#     for ans in answer:
+#         if ans == 'a':
+#             per[0] += a['san']
+#             per[1] += a['cho']
+#             per[2] += a['phl']
+#             per[3] += a['mel']
+#         elif ans == 'b':
+#             per[0] += b['san']
+#             per[1] += b['cho']
+#             per[2] += b['phl']
+#             per[3] += b['mel']
+#         elif ans == 'c':
+#             per[0] += c['san']
+#             per[1] += c['cho']
+#             per[2] += c['phl']
+#             per[3] += c['mel']
+#         else:
+#             per[0] += d['san']
+#             per[1] += d['cho']
+#             per[2] += d['phl']
+#             per[3] += d['mel']
+#     total = sum(per)
+#     # finding personality score
+#     per[0] = round((per[0]/total) * 100)
+#     per[1] = round((per[1]/total) * 100)
+#     per[2] = round((per[2]/total) * 100)
+#     per[3] = round((per[3]/total) * 100)
+#     answers = "".join(answer)
+#     try:
+#         # update to personality scores db
+#         # db.execute("UPDATE users SET (san = :san, cho = :cho, phl = :phl, mel = :mel) WHERE id = userid", 
+#         #             san=per[0], cho=per[1], phl=per[2], mel=per[3], userid = userid)
+#         id = db.execute("INSERT INTO users (alias, san, cho, phl, mel, answers, dur) VALUES (:alias, :san, :cho, :phl, :mel, :answers, :dur)",
+#                     alias=alias, san=per[0], cho=per[1], phl=per[2], mel=per[3], answers=answers, dur=dur)
+#         # finding personality type
+#         type = dominant(per)
 
-        # update personality type to db
-        db.execute("Update users SET verdict = :type WHERE id = :id", type=type, id=id)
+#         # update personality type to db
+#         db.execute("Update users SET verdict = :type WHERE id = :id", type=type, id=id)
 
-        # generate key
-        key = generateKey(id)
-        db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=userid)
-        return "".join(key)
-    except Exception:
-        return "failed"
+#         # generate key
+#         key = generateKey(id)
+#         db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=userid)
+#         return "".join(key)
+#     except Exception:
+#         return "failed"
 
-def generateKey(id):
-    user = db.execute("SELECT * from users WHERE id = :id", id=userid)
-    if not len(user) == 1:
-        return "Invalid UserId"
-    if not user['verdict']:
-        return "User has not taken the test"
-    b = True
-    while b:
-        key = random.randint(1111, 9999)
-        chk = db.execute("SELECT * FROM users WHERE key = :key", key=key)
-        if len(chk) == 0:
-            b = False
-    return key
+# def generateKey(id):
+#     user = db.execute("SELECT * from users WHERE id = :id", id=id)
+#     if not len(user) == 1:
+#         return "Invalid UserId"
+#     if not user['verdict']:
+#         return "User has not taken the test"
+#     b = True
+#     while b:
+#         key = random.randint(1111, 9999)
+#         chk = db.execute("SELECT * FROM users WHERE key = :key", key=key)
+#         if len(chk) == 0:
+#             b = False
+#     return key
 
 def bestMatch(matches, control):
-    cV1 = control['verdict'].split("-")[0]
-    cV2 = control['verdict'].split("-")[1]
+    cv1 = control['verdict'].split("-")[0]
+    cv2 = control['verdict'].split("-")[1]
 
     # get percentage of most dominant personalities of user
     dom1 = control[cv1]

@@ -59,6 +59,13 @@
       </div>
     </nav>
     </nav>
+    {% if added %}
+      <header>
+          <div class="alert bg-orange border text-center" role="alert">
+              {{ added }}
+          </div>
+      </header>
+    {% endif %}
   </header>
   <main class="mt-5">
     {% block main %}
