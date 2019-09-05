@@ -270,9 +270,6 @@ def key():
                         alias=request.form.get("name").strip(), key=request.form.get("key"))
             return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   
 
-
-
-
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):

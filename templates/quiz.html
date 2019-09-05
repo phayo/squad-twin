@@ -6,11 +6,11 @@
     <img src="https://derpicdn.net/img/2018/2/23/1663275/large.gif" class="qimg">
     <h1 class="qh1 pb-3">Who is your squadtwin?</h1>
     {% for question in questions %}
-        {% if questions.index(question) == 0 %}
-        <ul class="quiz-step ul step1 current">
+    {% if questions.index(question) == 0 %}
+    <ul class="quiz-step ul step1 current">
         {% else %}
         <ul class="quiz-step ul step1">
-        {% endif %}
+            {% endif %}
             <li class="question li">
                 <div class="question-wrap">
                     <h2>Question # {{ question['id'] }}: {{ question['question'] }}</h2>
@@ -37,14 +37,29 @@
                 </div>
             </li>
         </ul>
-    {% endfor %}
-    <ul id="results" class="justify-content-center ul">
-        <li class="results-inner li w-100">
-            <h6 class="display-2 text-white key">1111</h6>
-            <p>Use your unique personality key to see your squad twin.</p>
-            <Button class="desc btn btn-outline-light"><a href="/result">Click Here</a></Button>
-        </li>
-    </ul>
+        {% endfor %}
+        <div id="results" class="justify-content-center ul">
+            <span class="results-inner li w-100">
+                <div class="card cont">
+                    <div class="card-body">
+                        <h3 class="text-white key">You are done with your quiz! Please enter your name</h3>
+                        <form action="/key" method="post" class="niform">
+                            <div class="form-group">
+                                <input name="name" class="form-control" type="text" placeholder="Input your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1" class="form-control-file-label">Upload your
+                                    picture</label>
+                                <input type="file" class="form-control-file form-control" name="file"
+                                    id="exampleFormControlFile1">
+                                <input name="key" id="key" type="hidden">
+                            </div>
+                            <button type="submit" class="desc btn btn-outline-light mt-4">Generate Key</button>
+                        </form>
+                    </div>
+                </div>
+            </span>
+        </div>
 </div>
 <script type="text/javascript">
     var quizSteps = $("#quizzie .quiz-step"),
@@ -106,22 +121,17 @@
         if (quizSteps.find(".active").length == quizSteps.length) {
             $.ajax({
                 url: "/quiz",
-                data: {
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
                     answers: totalScore,
-                    name: $("#name").val()
-                },
+                }),
                 method: "POST",
-                success: function(key){
+                success: function (key) {
                     console.log("success")
-                    // var resultsTitle = $("#results p"),
-                    // resultsDesc = $("#results .desc");
-                    $(".key").text(key);
+                    $("#key").val(key);
                 }
-                
             });
-            
         }
     }
-
 </script>
 {% endblock %}

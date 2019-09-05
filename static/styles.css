@@ -22,8 +22,8 @@ body {
 }
 
 .ih1 {
-  font-weight: 800;
-  font-size: 3rem;
+    font-weight: 800;
+    font-size: 3rem;
 }
 
 .btni {
@@ -34,17 +34,18 @@ body {
 }
 
 hr {
-  border-top: 8px solid #fff;
-  width: 8rem;
+    border-top: 8px solid #fff;
+    width: 8rem;
 }
 
 .admin {
   height: 80vh;
 }
+
 .mb-3 {
-  text-align: center;
-  color: #fff;
-  font-weight: bolder;
+    text-align: center;
+    color: #fff;
+    font-weight: bolder;
 }
 
 .card {
@@ -52,8 +53,8 @@ hr {
 }
 
 .card-body {
-  /* scroll horizontally as needed */
-  overflow-x: auto;
+    /* scroll horizontally as needed */
+    overflow-x: auto;
 }
 
 .sidebar {
@@ -253,4 +254,22 @@ p {
   margin-top: 20px;
   font-weight: bolder;
   text-shadow: 4px 4px 0 rgb(254, 75, 40), 7px 7px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-control-file-label {
+    float: left;
+}
+
+.niform {
+    padding: 30px;
+}
+
+.ph1 {
+    margin-top: 7em;
+}
+
+.kbtn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

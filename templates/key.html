@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<!-- <form>
+    <h4> Please input your unique key</h4>
+  <div class="form-group">
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div> -->
+<div class="container ph1">
+  <div class="card cont">
+    <div class="card-body">
+      <h1 class="text-center text-white">Your unique personality key is </h1>
+      <h2 class="text-center text-white display-2 mt-3 mb-4"> 1111</h2>
+      <button type="button" class="btn btn-outline-light kbtn mt-4 mb-3" data-toggle="modal"
+        data-target="#exampleModal"> See your
+        SquadTwin</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Input Personality Key</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/result" method="post">
+        <div class="modal-body">
+          <input type="text" name="key" class="form-control" placeholder="Please input your unique key">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-outline-dark">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
