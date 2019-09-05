@@ -249,9 +249,6 @@ def verdict():
         return render_template("verdict.html")
 
 
-@app.route("/key",  methods=["GET", "POST"])
-def key():
-    return render_template("key.html")
 
 
 
