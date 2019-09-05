@@ -4,15 +4,29 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 import random
 
 from helpers import apology, login_required, bestMatch, dominant
+
+
+# initializing global variables
+pers = ["San", "Cho", "Phl", "Mel"]
+per = [0, 0, 0, 0]
+a = {"san": 1, "cho": 2, "phl": 3, "mel": 4}
+b = {"san": 2, "cho": 3, "phl": 4, "mel": 1}
+c = {"san": 3, "cho": 4, "phl": 1, "mel": 2}
+d = {"san": 4, "cho": 1, "phl": 2, "mel": 3}
+UPLOAD_FOLDER = '/static/images/'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 # Configure application
 app = Flask(__name__)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure responses aren't cached
 @app.after_request
@@ -32,15 +46,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///squad.db")
 
-# initializing global variables
-pers = ["San", "Cho", "Phl", "Mel"]
-per = [0, 0, 0, 0]
-a = {"san": 1, "cho": 2, "phl": 3, "mel": 4}
-b = {"san": 2, "cho": 3, "phl": 4, "mel": 1}
-c = {"san": 3, "cho": 4, "phl": 1, "mel": 2}
-d = {"san": 4, "cho": 1, "phl": 2, "mel": 3}
-
-def savepersonality(answer, dur, alias):
+def savepersonality(answer):
     for ans in answer:
         if ans == 'a':
             per[0] += a['san']
@@ -62,37 +68,33 @@ def savepersonality(answer, dur, alias):
             per[1] += d['cho']
             per[2] += d['phl']
             per[3] += d['mel']
+    print(per)
     total = sum(per)
+    print(total)
     # finding personality score
     per[0] = round((per[0]/total) * 100)
     per[1] = round((per[1]/total) * 100)
     per[2] = round((per[2]/total) * 100)
     per[3] = round((per[3]/total) * 100)
     answers = "".join(answer)
-    try:
-        # update to personality scores db
-        # db.execute("UPDATE users SET (san = :san, cho = :cho, phl = :phl, mel = :mel) WHERE id = userid", 
-        #             san=per[0], cho=per[1], phl=per[2], mel=per[3], userid = userid)
-        id = db.execute("INSERT INTO users (alias, san, cho, phl, mel, answers, dur) VALUES (:alias, :san, :cho, :phl, :mel, :answers, :dur)",
-                    alias=alias, san=per[0], cho=per[1], phl=per[2], mel=per[3], answers=answers, dur=dur)
-        # finding personality type
-        type = dominant(per)
+    # update to personality scores db
+    # db.execute("UPDATE users SET (san = :san, cho = :cho, phl = :phl, mel = :mel) WHERE id = userid", 
+    #             san=per[0], cho=per[1], phl=per[2], mel=per[3], userid = userid)
+    id = db.execute("INSERT INTO users (san, cho, phl, mel, answers) VALUES (:san, :cho, :phl, :mel, :answers)",
+                san=per[0], cho=per[1], phl=per[2], mel=per[3], answers=answers)
+    # finding personality type
+    type = dominant(per)
 
-        # update personality type to db
-        db.execute("Update users SET verdict = :type WHERE id = :id", type=type, id=id)
-
-        # generate key
-        key = generateKey(id)
-        db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=id)
-        return "".join(key)
-    except Exception:
-        return "failed"
+    # update personality type to db
+    db.execute("Update users SET verdict = :type WHERE id = :id", type=type, id=id)
+    
+    return generateKey(id)
 
 def generateKey(id):
     user = db.execute("SELECT * from users WHERE id = :id", id=id)
     if not len(user) == 1:
         return "Invalid UserId"
-    if not user['verdict']:
+    if not user[0]['verdict']:
         return "User has not taken the test"
     b = True
     while b:
@@ -100,7 +102,12 @@ def generateKey(id):
         chk = db.execute("SELECT * FROM users WHERE key = :key", key=key)
         if len(chk) == 0:
             b = False
+    db.execute("UPDATE users SET key = :key WHERE id = :id",key=key, id=id)
     return key
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route("/")
@@ -110,21 +117,17 @@ def index():
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
     if request.method == "POST":
-        print("Entered o")
-        if not request.form.get("answers") or not request.form.get("name") or not request.form.get("duration"):
-            return apology("Error submitting answers",)
-        try:
-            answers = list(request.form.get("answers"))
-            alias = request.form.get("name")
-            dur = request.form.get("duration")
-        except ValueError:
-            return apology("TODO", 400)
+        data = request.get_json()
         
-        key = savepersonality(answers, dur, alias)
-        return render_template("key.html", key=key)
+        if not "answers" in data or not "name" in data:
+            return apology("Error submitting answers", 400)
+        
+        answers = data['answers']        
+        key = savepersonality(answers)
+        print(key)
+        return jsonify(key) #render_template("key.html", key=key)
     else:
         questions = db.execute("SELECT * FROM questions")
-        print(questions)
         return render_template("quiz.html", questions=questions)
 
 @app.route("/admin", methods=["GET", "POST"])
@@ -178,7 +181,7 @@ def dashboard():
         except KeyError:
             print("Key 'testing' not found")
 
-    return render_template("admin.html")#, data=all_data, l=len(history))
+    return render_template("admin.html", data=all_data)
 
 @app.route("/question", methods=["GET", "POST"])
 @login_required
@@ -222,14 +225,12 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/verdict", methods=["GET", "POST"])
-def verdict():
+@app.route("/result", methods=["POST"])
+def result():
     if request.method == "POST":
         if not request.form.get("key"):
             return apology("Enter a valid key", 400)
-        key = request.form.get("key")
-
-        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=key)
+        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=request.form.get("key").strip())
         if not len(user_row) == 1:
             return apology("Invalid key", 400)
         verdict = user_row[0]['verdict']
@@ -242,16 +243,28 @@ def verdict():
                 match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[1])
         
         if len(match) == 1:
-            return render_template("match.html", match=match[0])
+            return render_template("result.html", user=user_row[0], match=match[0])
         
-        return render_template("match.html", match=bestMatch(match, user_row[0]))
-    else:
-        return render_template("verdict.html")
+        return render_template("result.html", user=user_row[0], match=bestMatch(match, user_row[0]))
 
-
-
-
-
+@app.route("/key", methods=["POST"])
+def key():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files or not request.form.get("name") or not request.form.get("key"):
+            return apology("Make sure you filled all inputs and uploaded an image")
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return apology("You have not uploaded an image", 400)
+        if file and allowed_file(file.filename):
+            actual_filename = request.form.get("key").strip() + "." + file.filename.rsplit('.', 1)[1].lower()
+            filename = secure_filename(actual_filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            db.execute("UPDATE users SET alias = :alias WHERE key = :key", 
+                        alias=request.form.get("name").strip(), key=request.form.get("key"))
+            return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   
 
 
 
