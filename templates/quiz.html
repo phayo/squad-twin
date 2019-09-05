@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<div id="quizzie" class="anul">
+    <img src="https://derpicdn.net/img/2018/2/23/1663275/large.gif" class="qimg">
+    <h1 class="qh1 pb-3">Who is your squadtwin?</h1>
+    {% for question in questions %}
+        {% if questions.index(question) == 0 %}
+        <ul class="quiz-step ul step1 current">
+        {% else %}
+        <ul class="quiz-step ul step1">
+        {% endif %}
+            <li class="question li">
+                <div class="question-wrap">
+                    <h2>Question # {{ question['id'] }}: {{ question['question'] }}</h2>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="a">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['a'] }}</p>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['b'] }}</p>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['c'] }}</p>
+                </div>
+            </li>
+            <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
+                <div class="answer-wrap">
+                    <p class="answer-text">{{ question['d'] }}</p>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+    <ul id="results" class="justify-content-center ul">
+        <li class="results-inner li w-100">
+            <h6 class="display-2 text-white key">1111</h6>
+            <p>Use your unique personality key to see your squad twin.</p>
+            <Button class="desc btn btn-outline-light"><a href="/result">Click Here</a></Button>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var quizSteps = $("#quizzie .quiz-step"),
+        totalScore = [];
+
+    // for each step in the quiz, add the selected answer value to the total score
+    // toggle a visual active state to show which option has been selected
+    quizSteps.each(function () {
+        var currentStep = $(this),
+            ansOpts = currentStep.children(".quiz-answer");
+        // for each option per step, add a click listener
+        // apply active class and calculate the total score
+        ansOpts.each(function () {
+            var eachOpt = $(this);
+            eachOpt[0].addEventListener("click", check, false);
+
+            function check() {
+                var $this = $(this),
+                    value = $this.attr("data-quizIndex"),
+                    answerScore = value;
+                // check to see if an answer was previously selected
+                if (currentStep.children(".active").length > 0) {
+                    var wasActive = currentStep.children(".active"),
+                        oldScoreValue = wasActive.attr("data-quizIndex"),
+                        oldScore = oldScoreValue;
+                    // handle visual active state
+                    currentStep.children(".active").removeClass("active");
+                    $this.addClass("active");
+                    // handle the score calculation
+                    totalScore.push(oldScoreValue);
+                    totalScore.push(answerScore);
+                    console.log(totalScore);
+                    calcResults(totalScore);
+                } else {
+                    // handle visual active state
+                    $this.addClass("active");
+                    // handle score calculation
+                    totalScore.push(answerScore);
+                    console.log(totalScore);
+                    calcResults(totalScore);
+                    // handle current step
+                    updateStep(currentStep);
+                }
+            }
+        });
+    });
+
+    // show current step/hide other steps
+    function updateStep(currentStep) {
+        if (currentStep.hasClass("current")) {
+            currentStep.removeClass("current");
+            currentStep.next().addClass("current");
+        }
+    }
+
+    // display personality key
+    function calcResults(totalScore) {
+        // only update the results div if all questions have been answered
+        if (quizSteps.find(".active").length == quizSteps.length) {
+            $.ajax({
+                url: "/quiz",
+                data: {
+                    answers: totalScore,
+                    name: $("#name").val()
+                },
+                method: "POST",
+                success: function(key){
+                    console.log("success")
+                    // var resultsTitle = $("#results p"),
+                    // resultsDesc = $("#results .desc");
+                    $(".key").text(key);
+                }
+                
+            });
+            
+        }
+    }
+
+</script>
+{% endblock %}

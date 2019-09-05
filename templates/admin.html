@@ -1,0 +1,77 @@
+{% extends "layout.html" %} {% block title %} Admin Panel {% endblock %} {%
+block main %}
+
+<h1 class="mb-3">All Users</h1>
+<div class="container">
+  <section class="card">
+    <div class="card-body">
+      <table class="display" id="table_id">
+        <thead>
+          <tr>
+            <th scope="col">S/N</th>
+            <th scope="col">Name</th>
+            <th scope="col">Status</th>
+            <th scope="col">% San</th>
+            <th scope="col">% Mel</th>
+            <th scope="col">% Cho</th>
+            <th scope="col">% Phl</th>
+            <th scope="col">Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Joey Tribbiani</td>
+            <td>Admin</td>
+            <td>22%</td>
+            <td>24%</td>
+            <td>23%</td>
+            <td>24%</td>
+            <td>Phl : Cho</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Chandler Bing</td>
+            <td>User</td>
+            <td>22%</td>
+            <td>24%</td>
+            <td>23%</td>
+            <td>24%</td>
+            <td>Mel : Cho</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Phoebe Buffay</td>
+            <td>User</td>
+            <td>22%</td>
+            <td>24%</td>
+            <td>23%</td>
+            <td>24%</td>
+            <td>Phl : San</td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td>Rachel Green</td>
+            <td>User</td>
+            <td>22%</td>
+            <td>24%</td>
+            <td>23%</td>
+            <td>24%</td>
+            <td>San : Cho</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<script
+  type="text/javascript"
+  charset="utf8"
+  src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"
+></script>
+<script>
+  $(document).ready(function() {
+    $("#table_id").DataTable();
+  });
+</script>
+{% endblock %}
