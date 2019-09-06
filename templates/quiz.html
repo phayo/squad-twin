@@ -43,7 +43,7 @@
                 <div class="card cont">
                     <div class="card-body">
                         <h3 class="text-white key">You are done with your quiz! Please enter your name</h3>
-                        <form action="/key" method="post" class="niform">
+                        <form action="/key" method="post" class="niform" enctype="multipart/form-data">
                             <div class="form-group">
                                 <input name="name" class="form-control" type="text" placeholder="Input your name">
                             </div>
@@ -52,7 +52,9 @@
                                     picture</label>
                                 <input type="file" class="form-control-file form-control" name="file"
                                     id="exampleFormControlFile1">
-                                <input name="key" id="key" type="hidden">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="key" id="key" value="">
                             </div>
                             <button type="submit" class="desc btn btn-outline-light mt-4">Generate Key</button>
                         </form>
@@ -124,12 +126,14 @@
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({
                     answers: totalScore,
+                    name: "" //$("#name").val()
                 }),
                 method: "POST",
-                success: function (key) {
+                success: function(key){
                     console.log("success")
                     $("#key").val(key);
                 }
+                
             });
         }
     }

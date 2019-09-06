@@ -1,3 +1,4 @@
+import os
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
@@ -17,7 +18,7 @@ a = {"san": 1, "cho": 2, "phl": 3, "mel": 4}
 b = {"san": 2, "cho": 3, "phl": 4, "mel": 1}
 c = {"san": 3, "cho": 4, "phl": 1, "mel": 2}
 d = {"san": 4, "cho": 1, "phl": 2, "mel": 3}
-UPLOAD_FOLDER = '/static/images/'
+UPLOAD_FOLDER = '/static/images'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 # Configure application
@@ -27,6 +28,10 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Create a directory in a known location to save files to.
+uploads_dir = os.path.join(app.instance_path, 'images')
+#os.makedirs(uploads_dir)
 
 # Ensure responses aren't cached
 @app.after_request
@@ -117,12 +122,13 @@ def index():
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
     if request.method == "POST":
+        print("entered")
         data = request.get_json()
         
         if not "answers" in data or not "name" in data:
             return apology("Error submitting answers", 400)
-        
-        answers = data['answers']        
+        answers = data['answers']
+        print(answers)      
         key = savepersonality(answers)
         print(key)
         return jsonify(key) #render_template("key.html", key=key)
@@ -204,13 +210,21 @@ def question():
 @login_required
 def register():
     if request.method == "POST":
-        if not request.form.get("key") or request.form.get("password"):
+        print(request.form.get("key"))
+        print(request.form.get("password"))
+        print(request.form.get("confirmation"))
+        if not request.form.get("key") or not request.form.get("password"):
             return apology("Fill all input fields", 400)
+        if not request.form.get("key").strip() == request.form.get("key").strip():
+            return apology("Password Mismatch", 400)
         rows = db.execute("SELECT * FROM users WHERE key = :key", key=request.form.get("key").strip())
+        if not len(rows) == 1:
+            return apology("INVALID KEY")
         hash = generate_password_hash(request.form.get("password").strip())
-        db.execute("UPDATE users SET (hash = :hash, status = :status) WHERE key = :key",
-                    hash=hash, status='admin', key=request.form.get("key").strip())
-        #session["user_id"] = userid
+        db.execute("UPDATE users SET hash = :hash WHERE key = :key",
+                    hash=hash, key=request.form.get("key").strip())
+        db.execute("UPDATE users SET status = :status WHERE key = :key",
+                    status='admin', key=request.form.get("key").strip())
         return redirect("/dashboard")
     else:
         return render_template("register.html")
@@ -230,32 +244,31 @@ def result():
     if request.method == "POST":
         if not request.form.get("key"):
             return apology("Enter a valid key", 400)
-        try:
-            key = int(request.form.get("key").strip())
-        except ValueError:
-            return apology("Enter a valid key", 400)
-        
+        key = request.form.get("key").strip()
         user_row = db.execute("SELECT * FROM users WHERE key = :key", key=key)
         if not len(user_row) == 1:
-            return apology("Key does ot exist", 400)
+            return apology("INVALID KEY", 400)
+        
         verdict = user_row[0]['verdict']
 
         # find best match
-        match = db.execute("SELECT * FROM users WHERE verdict LIKE :type", type=verdict)
+        match = db.execute("SELECT * FROM users WHERE verdict LIKE :type AND NOT key = :key", type=verdict, key=key)
         if len(match) == 0:
-            match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[0])
+            match = db.execute("SELECT * FROM users WHERE verdict LIKE :type AND NOT key = :key", 
+                                type="%" + verdict.split("-")[0] + "%", key=key)
             if len(match) == 0:
-                match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[1])
-        
+                match = db.execute("SELECT * FROM users WHERE verdict LIKE :type AND NOT key = :key", 
+                                    type="%" + verdict.split("-")[1] + "%", key=key)
         if len(match) == 1:
             return render_template("result.html", user=user_row[0], match=match[0])
-        return render_template("result.html", user=user_row[0], match=bestMatch(match, user_row[0]))
+        twin = bestMatch(match, user_row[0])
+        return render_template("result.html", user=user_row[0], match=twin)
 
 @app.route("/key", methods=["POST"])
 def key():
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files or not request.form.get("name") or not request.form.get("key"):
+        if not 'file' in request.files or not request.form.get("name") or not request.form.get("key"):
             return apology("Make sure you filled all inputs and uploaded an image")
         file = request.files['file']
         # if user does not select file, browser also
@@ -265,7 +278,7 @@ def key():
         if file and allowed_file(file.filename):
             actual_filename = request.form.get("key").strip() + "." + file.filename.rsplit('.', 1)[1].lower()
             filename = secure_filename(actual_filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(uploads_dir, filename))
             db.execute("UPDATE users SET alias = :alias WHERE key = :key", 
                         alias=request.form.get("name").strip(), key=request.form.get("key"))
             return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   

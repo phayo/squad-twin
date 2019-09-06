@@ -61,8 +61,8 @@ def dominant(per):
     return pers[df] + "-" + pers[ds]
 
 def bestMatch(matches, control):
-    cv1 = control['verdict'].split("-")[0]
-    cv2 = control['verdict'].split("-")[1]
+    cv1 = control['verdict'].split("-")[0].lower()
+    cv2 = control['verdict'].split("-")[1].lower()
 
     # get percentage of most dominant personalities of user
     dom1 = control[cv1]
