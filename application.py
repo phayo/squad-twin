@@ -18,20 +18,19 @@ a = {"san": 1, "cho": 2, "phl": 3, "mel": 4}
 b = {"san": 2, "cho": 3, "phl": 4, "mel": 1}
 c = {"san": 3, "cho": 4, "phl": 1, "mel": 2}
 d = {"san": 4, "cho": 1, "phl": 2, "mel": 3}
-UPLOAD_FOLDER = '/static/images'
+#UPLOAD_FOLDER = os.path.join(app.root_path, 'static/images')
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 # Configure application
 app = Flask(__name__)
 
+# Set folder for saving file uploaded by the user
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static/images')
+
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Create a directory in a known location to save files to.
-uploads_dir = os.path.join(app.instance_path, 'images')
-#os.makedirs(uploads_dir)
 
 # Ensure responses aren't cached
 @app.after_request
@@ -278,7 +277,7 @@ def key():
         if file and allowed_file(file.filename):
             actual_filename = request.form.get("key").strip() + "." + file.filename.rsplit('.', 1)[1].lower()
             filename = secure_filename(actual_filename)
-            file.save(os.path.join(uploads_dir, filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             db.execute("UPDATE users SET alias = :alias WHERE key = :key", 
                         alias=request.form.get("name").strip(), key=request.form.get("key"))
             return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   
