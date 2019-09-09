@@ -9,23 +9,23 @@ main %}
           <div class="result-area">
             <div class="result-img">
               <img
-                src="./../static/images/image.png"
+                src="./../static/images/{{ user.image }}"
                 alt="Picture of User"
                 class="result-pic"
               />
             </div>
-            <p class="name">Doug Lloyd</p>
+            <p class="name">{{ user.alias }}</p>
           </div>
           <p class="equality">==</p>
           <div class="result-area">
             <div class="result-img">
               <img
-                src="./../static/images/image2.png"
+                src="./../instance/images/{{ match.image }}"
                 alt="Picture of matched squad twin"
                 class="result-pic"
               />
             </div>
-            <p class="name">Zamyla Chan</p>
+            <p class="name">{{ match.alias }}</p>
           </div>
         </div>
         <p class="congrats">Congratulations!!!</p>
