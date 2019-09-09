@@ -238,6 +238,25 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
+@app.route("/key", methods=["POST"])
+def key():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if not 'file' in request.files or not request.form.get("name") or not request.form.get("key"):
+            return apology("Make sure you filled all inputs and uploaded an image")
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return apology("You have not uploaded an image", 400)
+        if file and allowed_file(file.filename):
+            actual_filename = request.form.get("key").strip() + "." + file.filename.rsplit('.', 1)[1].lower()
+            filename = secure_filename(actual_filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            db.execute("UPDATE users SET alias = :alias, image = :image WHERE key = :key", 
+                        alias=request.form.get("name").strip(), image=filename, key=request.form.get("key"))
+            return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip()) 
+
 @app.route("/result", methods=["POST"])
 def result():
     if request.method == "POST":
@@ -263,24 +282,7 @@ def result():
         twin = bestMatch(match, user_row[0])
         return render_template("result.html", user=user_row[0], match=twin)
 
-@app.route("/key", methods=["POST"])
-def key():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if not 'file' in request.files or not request.form.get("name") or not request.form.get("key"):
-            return apology("Make sure you filled all inputs and uploaded an image")
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            return apology("You have not uploaded an image", 400)
-        if file and allowed_file(file.filename):
-            actual_filename = request.form.get("key").strip() + "." + file.filename.rsplit('.', 1)[1].lower()
-            filename = secure_filename(actual_filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            db.execute("UPDATE users SET alias = :alias WHERE key = :key", 
-                        alias=request.form.get("name").strip(), key=request.form.get("key"))
-            return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   
+  
 
 def errorhandler(e):
     """Handle error"""
