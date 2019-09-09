@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
 
   <!-- Required meta tags -->
@@ -12,11 +13,7 @@
 
   <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
   <link href="/static/favicon.ico" rel="icon">
-  <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css"
-    />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" />
   <link href="https://fonts.googleapis.com/css?family=Lobster|Pacifico|Righteous&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Satisfy|Pathway+Gothic+One" rel="stylesheet">
   <link href="/static/styles.css" rel="stylesheet">
@@ -49,22 +46,27 @@
           <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="/question">Add Questions</a></li>
           <li class="nav-item"><a class="nav-link" href="/register">Add admin</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#exampleModal">SquadTwin</a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
         </ul>
         {% else %}
         <ul class="navbar-nav ml-auto mt-2">
           <li class="nav-item"><a class="nav-link" href="/admin">Log In</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#exampleModal">SquadTwin</a></li>
         </ul>
         {% endif %}
       </div>
     </nav>
     </nav>
     {% if added %}
-      <header>
-          <div class="alert bg-orange border text-center" role="alert">
-              {{ added }}
-          </div>
-      </header>
+    <header>
+      <div class="alert alert-warning alert-dismissible text-white fade show" role="alert">
+        {{ added }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </header>
     {% endif %}
   </header>
   <main class="mt-5">
@@ -74,11 +76,36 @@
     {% endblock %}
 
   </main>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Input Personality Key</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/result" method="post">
+          <div class="modal-body">
+            <input type="text" name="key" class="form-control" placeholder="Please input your unique key">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-  <!-- <footer class="small text-center text-muted">
-    Data provided for free by <a href="https://iextrading.com/developer">IEX</a>. View <a
-      href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
-  </footer> -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/boots
 
 </body>
 
