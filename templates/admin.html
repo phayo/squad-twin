@@ -8,7 +8,7 @@ block main %}
       <table class="display" id="table_id">
         <thead>
           <tr>
-            <th scope="col" class="table-title">S/N</th>
+            <th scope="col" class="table-title">Key</th>
             <th scope="col" class="table-title">Name</th>
             <th scope="col" class="table-title">Status</th>
             <th scope="col" class="table-title">% San</th>
@@ -21,7 +21,7 @@ block main %}
         <tbody>
           {% for info in data %}
           <tr>
-            <th scope="row">{{ info.id }}</th>
+            <th scope="row">{{ info.key }}</th>
             <td>{{ info.alias }}</td>
             <td>{{ info.status }}</td>
             <td>{{ info.san }}%</td>
