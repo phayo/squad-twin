@@ -1,8 +1,6 @@
 body {
   background-image: url("https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_1280.jpg");
   background-color: grey;
-  /* #37c6574d; */
-  /* rgba(53, 194, 83, 0.13); */
   opacity: 0.9;
   background-repeat: no-repeat;
   background-size: cover;
@@ -22,8 +20,8 @@ body {
 }
 
 .ih1 {
-    font-weight: 800;
-    font-size: 3rem;
+  font-weight: 800;
+  font-size: 3rem;
 }
 
 .btni {
@@ -34,8 +32,8 @@ body {
 }
 
 hr {
-    border-top: 8px solid #fff;
-    width: 8rem;
+  border-top: 8px solid #fff;
+  width: 8rem;
 }
 
 .admin {
@@ -43,9 +41,9 @@ hr {
 }
 
 .mb-3 {
-    text-align: center;
-    color: #fff;
-    font-weight: bolder;
+  text-align: center;
+  color: #fff;
+  font-weight: bolder;
 }
 
 .card {
@@ -53,8 +51,8 @@ hr {
 }
 
 .card-body {
-    /* scroll horizontally as needed */
-    overflow-x: auto;
+  /* scroll horizontally as needed */
+  overflow-x: auto;
 }
 
 .sidebar {
@@ -115,7 +113,7 @@ hr {
 }
 
 .results-inner {
-  padding: 5% 2%;
+  padding: 2% 2%;
 }
 
 .li:last-child {
@@ -126,6 +124,7 @@ hr {
   display: block;
   padding: 1%;
   margin: 0.2em 10%;
+  height: 7em;
 }
 
 .answer-wrap {
@@ -134,8 +133,16 @@ hr {
 }
 
 .answer-wrap:hover {
-  background: #f65f3f;
+  background: transparent;
   border-radius: 10px;
+  text-shadow: -1px -1px #fe7558;
+  box-shadow: 0.3em 0.3em 0 0 #fe7558, inset 0.3em 0.3em 0 0 #fe7558;
+  transition: 0.50s;
+  transform: translate(0px, 5px);
+}
+
+.aw:hover {
+  margin: 3%;
 }
 
 .anli {
@@ -229,6 +236,7 @@ p {
 .result-heading {
   margin-bottom: 30px;
 }
+
 .result-panel {
   display: flex;
   justify-content: center;
@@ -257,19 +265,36 @@ p {
 }
 
 .form-control-file-label {
-    float: left;
+  float: left;
 }
 
 .niform {
-    padding: 30px;
+  padding: 30px;
 }
 
 .ph1 {
-    margin-top: 7em;
+  margin-top: 7em;
 }
 
 .kbtn {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alert-warning {
+  width: 20em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ff4d19;
+  border: none;
+  text-align: center;
+  color: #fff !important;
 }
