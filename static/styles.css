@@ -2,7 +2,7 @@ body {
   background-image: url("https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_1280.jpg");
   background-color: grey;
   opacity: 0.9;
-  background-repeat: no-repeat;
+  /*background-repeat: no-repeat;*/
   background-size: cover;
 }
 
@@ -73,7 +73,7 @@ hr {
 }
 
 #quizzie {
-  padding: 3% 0;
+  padding: 1em 0;
 }
 
 .ul {
@@ -136,19 +136,20 @@ hr {
   background: transparent;
   border-radius: 10px;
   text-shadow: -1px -1px #fe7558;
-  box-shadow: 0.3em 0.3em 0 0 #fe7558, inset 0.3em 0.3em 0 0 #fe7558;
-  transition: 0.50s;
-  transform: translate(0px, 5px);
+  box-shadow: 0.2em 0.2em 0 0 #fe7558, inset 0.2em 0.2em 0 0 #fe7558;
+  /* transition: 0.50s;
+  transform: translate(0px, 5px); */
 }
 
-.aw:hover {
+/* .aw:hover {
   margin: 3%;
-}
+} */
 
 .anli {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  padding: 5px;
 }
 
 .anul {
@@ -246,11 +247,15 @@ p {
 .result-img {
   width: 250px;
   height: 250px;
+  overflow: hidden;
 }
 
 .result-pic {
-  width: 100%;
+  width: 250px;
+  height: 250px;
+  /*width: 100%;*/
   border-radius: 100%;
+  border: 4px solid #ff4d19
 }
 
 .equality {

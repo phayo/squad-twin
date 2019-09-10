@@ -19,7 +19,7 @@ b = {"san": 2, "cho": 3, "phl": 4, "mel": 1}
 c = {"san": 3, "cho": 4, "phl": 1, "mel": 2}
 d = {"san": 4, "cho": 1, "phl": 2, "mel": 3}
 #UPLOAD_FOLDER = os.path.join(app.root_path, 'static/images')
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'jfif'}
 
 # Configure application
 app = Flask(__name__)
@@ -175,7 +175,7 @@ def admin():
 @login_required
 def dashboard():
     """Show all user data"""
-    all_data = db.execute("SELECT * FROM users")
+    all_data = db.execute("SELECT * FROM users WHERE NOT key = 5454")
     if (len(all_data) == 0):
         return render_template("empty.html", message="No data to display")
 
