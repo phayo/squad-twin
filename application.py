@@ -1,3 +1,4 @@
+import os
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
@@ -17,11 +18,14 @@ a = {"san": 1, "cho": 2, "phl": 3, "mel": 4}
 b = {"san": 2, "cho": 3, "phl": 4, "mel": 1}
 c = {"san": 3, "cho": 4, "phl": 1, "mel": 2}
 d = {"san": 4, "cho": 1, "phl": 2, "mel": 3}
-UPLOAD_FOLDER = '/static/images/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+#UPLOAD_FOLDER = os.path.join(app.root_path, 'static/images')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'jfif'}
 
 # Configure application
 app = Flask(__name__)
+
+# Set folder for saving file uploaded by the user
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static/images')
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -117,12 +121,13 @@ def index():
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
     if request.method == "POST":
+        print("entered")
         data = request.get_json()
         
         if not "answers" in data or not "name" in data:
             return apology("Error submitting answers", 400)
-        
-        answers = data['answers']        
+        answers = data['answers']
+        print(answers)      
         key = savepersonality(answers)
         print(key)
         return jsonify(key) #render_template("key.html", key=key)
@@ -170,7 +175,7 @@ def admin():
 @login_required
 def dashboard():
     """Show all user data"""
-    all_data = db.execute("SELECT * FROM users")
+    all_data = db.execute("SELECT * FROM users WHERE NOT key = 5454")
     if (len(all_data) == 0):
         return render_template("empty.html", message="No data to display")
 
@@ -196,21 +201,29 @@ def question():
             return apology("Fill all inputs", 400)
         db.execute("INSERT INTO questions (question, a , b , c , d) VALUES (:que, :a, :b, :c, :d)",
                     que=que.strip(), a=a.strip(), b=b.strip(), c=c.strip(), d=d.strip())
-        return render_template("questions.html", added="added")
+        return render_template("questions.html", added=True)
     else:
-        return render_template("questions.html")
+        return render_template("questions.html", added=False)
 
 @app.route("/register", methods=["GET", "POST"])
 @login_required
 def register():
     if request.method == "POST":
-        if not request.form.get("key") or request.form.get("password"):
+        print(request.form.get("key"))
+        print(request.form.get("password"))
+        print(request.form.get("confirmation"))
+        if not request.form.get("key") or not request.form.get("password"):
             return apology("Fill all input fields", 400)
+        if not request.form.get("key").strip() == request.form.get("key").strip():
+            return apology("Password Mismatch", 400)
         rows = db.execute("SELECT * FROM users WHERE key = :key", key=request.form.get("key").strip())
+        if not len(rows) == 1:
+            return apology("INVALID KEY")
         hash = generate_password_hash(request.form.get("password").strip())
-        db.execute("UPDATE users SET (hash = :hash, status = :status) WHERE key = :key",
-                    hash=hash, status='admin', key=request.form.get("key").strip())
-        #session["user_id"] = userid
+        db.execute("UPDATE users SET hash = :hash WHERE key = :key",
+                    hash=hash, key=request.form.get("key").strip())
+        db.execute("UPDATE users SET status = :status WHERE key = :key",
+                    status='admin', key=request.form.get("key").strip())
         return redirect("/dashboard")
     else:
         return render_template("register.html")
@@ -225,33 +238,11 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/result", methods=["POST"])
-def result():
-    if request.method == "POST":
-        if not request.form.get("key"):
-            return apology("Enter a valid key", 400)
-        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=request.form.get("key").strip())
-        if not len(user_row) == 1:
-            return apology("Invalid key", 400)
-        verdict = user_row[0]['verdict']
-
-        # find best match
-        match = db.execute("SELECT * FROM users WHERE verdict LIKE :type", type=verdict)
-        if len(match) == 0:
-            match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[0])
-            if len(match) == 0:
-                match = db.execute("SELECT * FROM users WHERE verdict LIKE %:type%", type=verdict.split("-")[1])
-        
-        if len(match) == 1:
-            return render_template("result.html", user=user_row[0], match=match[0])
-        
-        return render_template("result.html", user=user_row[0], match=bestMatch(match, user_row[0]))
-
 @app.route("/key", methods=["POST"])
 def key():
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files or not request.form.get("name") or not request.form.get("key"):
+        if not 'file' in request.files or not request.form.get("name") or not request.form.get("key"):
             return apology("Make sure you filled all inputs and uploaded an image")
         file = request.files['file']
         # if user does not select file, browser also
@@ -262,13 +253,37 @@ def key():
             actual_filename = request.form.get("key").strip() + "." + file.filename.rsplit('.', 1)[1].lower()
             filename = secure_filename(actual_filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            db.execute("UPDATE users SET alias = :alias WHERE key = :key", 
-                        alias=request.form.get("name").strip(), key=request.form.get("key"))
-            return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip())   
+            db.execute("UPDATE users SET alias = :alias, image = :image WHERE key = :key", 
+                        alias=request.form.get("name").strip(), image=filename, key=request.form.get("key"))
+            return render_template("key.html", key=request.form.get("key"), alias=request.form.get("name").strip()) 
 
+@app.route("/result", methods=["POST"])
+def result():
+    if request.method == "POST":
+        if not request.form.get("key"):
+            return apology("Enter a valid key", 400)
+        key = request.form.get("key").strip()
+        user_row = db.execute("SELECT * FROM users WHERE key = :key", key=key)
+        if not len(user_row) == 1:
+            return apology("INVALID KEY", 400)
+        
+        verdict = user_row[0]['verdict']
 
+        # find best match
+        match = db.execute("SELECT * FROM users WHERE verdict LIKE :type AND NOT key = :key AND NOT key = 5454", 
+                            type=verdict, key=key)
+        if len(match) == 0:
+            match = db.execute("SELECT * FROM users WHERE verdict LIKE :type AND NOT key = :key AND NOT key = 5454", 
+                                type="%" + verdict.split("-")[0] + "%", key=key)
+            if len(match) == 0:
+                match = db.execute("SELECT * FROM users WHERE verdict LIKE :type AND NOT key = :key AND NOT key = 5454", 
+                                    type="%" + verdict.split("-")[1] + "%", key=key)
+        if len(match) == 1:
+            return render_template("result.html", user=user_row[0], match=match[0])
+        twin = bestMatch(match, user_row[0])
+        return render_template("result.html", user=user_row[0], match=twin)
 
-
+  
 
 def errorhandler(e):
     """Handle error"""

@@ -8,57 +8,29 @@ block main %}
       <table class="display" id="table_id">
         <thead>
           <tr>
-            <th scope="col">S/N</th>
-            <th scope="col">Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">% San</th>
-            <th scope="col">% Mel</th>
-            <th scope="col">% Cho</th>
-            <th scope="col">% Phl</th>
-            <th scope="col">Verdict</th>
+            <th scope="col" class="table-title">Key</th>
+            <th scope="col" class="table-title">Name</th>
+            <th scope="col" class="table-title">Status</th>
+            <th scope="col" class="table-title">% San</th>
+            <th scope="col" class="table-title">% Cho</th>
+            <th scope="col" class="table-title">% Mel</th>
+            <th scope="col" class="table-title">% Phl</th>
+            <th scope="col" class="table-title">Verdict</th>
           </tr>
         </thead>
         <tbody>
+          {% for info in data %}
           <tr>
-            <th scope="row">1</th>
-            <td>Joey Tribbiani</td>
-            <td>Admin</td>
-            <td>22%</td>
-            <td>24%</td>
-            <td>23%</td>
-            <td>24%</td>
-            <td>Phl : Cho</td>
+            <th scope="row">{{ info.key }}</th>
+            <td>{{ info.alias }}</td>
+            <td>{{ info.status }}</td>
+            <td>{{ info.san }}%</td>
+            <td>{{ info.cho }}%</td>
+            <td>{{ info.mel }}%</td>
+            <td>{{ info.phl }}%</td>
+            <td>{{ info.verdict }}</td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Chandler Bing</td>
-            <td>User</td>
-            <td>22%</td>
-            <td>24%</td>
-            <td>23%</td>
-            <td>24%</td>
-            <td>Mel : Cho</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Phoebe Buffay</td>
-            <td>User</td>
-            <td>22%</td>
-            <td>24%</td>
-            <td>23%</td>
-            <td>24%</td>
-            <td>Phl : San</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>Rachel Green</td>
-            <td>User</td>
-            <td>22%</td>
-            <td>24%</td>
-            <td>23%</td>
-            <td>24%</td>
-            <td>San : Cho</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>

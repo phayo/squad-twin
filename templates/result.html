@@ -1,0 +1,37 @@
+{% extends "layout.html" %} {% block title %} Register {% endblock %} {% block
+main %}
+<div class="container">
+  <div class="card cont">
+    <div class="card-body">
+      <div class="result-wrapper">
+        <h1 class="result-heading">We found your twin</h1>
+        <div class="result-panel">
+          <div class="result-area">
+            <div class="result-img">
+              <img
+                src="./../static/images/{{ user.image }}"
+                alt="Picture of User"
+                class="result-pic"
+              />
+            </div>
+            <p class="name bg-success">{{ user.alias }}</p>
+          </div>
+          <!--<p class="equality">==</p>-->
+          <div class="result-area">
+            <div class="result-img">
+              <img
+                src="./../static/images/{{ match.image }}"
+                alt="Picture of matched squad twin"
+                class="result-pic"
+              />
+            </div>
+            <p class="name bg-success">{{ match.alias }}</p>
+          </div>
+        </div>
+        <p class="congrats">Congratulations!!!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

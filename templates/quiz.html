@@ -4,47 +4,72 @@
 
 <div id="quizzie" class="anul">
     <img src="https://derpicdn.net/img/2018/2/23/1663275/large.gif" class="qimg">
-    <h1 class="qh1 pb-3">Who is your squadtwin?</h1>
-    {% for question in questions %}
-        {% if questions.index(question) == 0 %}
-        <ul class="quiz-step ul step1 current">
-        {% else %}
-        <ul class="quiz-step ul step1">
-        {% endif %}
-            <li class="question li">
-                <div class="question-wrap">
-                    <h2>Question # {{ question['id'] }}: {{ question['question'] }}</h2>
+    <div class="card cont mt-3">
+        <div class="card-body mt-0">
+            <h1 class="qh1 pb-3">Who is your squadtwin?</h1>
+            {% for question in questions %}
+            {% if questions.index(question) == 0 %}
+            <ul class="quiz-step ul step1 current">
+                {% else %}
+
+                <ul class="quiz-step ul step1">
+                    {% endif %}
+                    <li class="question li">
+                        <div class="question-wrap">
+                            <h2>Question # {{ question['id'] }}: {{ question['question'] }}</h2>
+                        </div>
+                    </li>
+                    <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="a">
+                        <div class="answer-wrap">
+                            <p class="answer-text">{{ question['a'] }}</p>
+                        </div>
+                    </li>
+                    <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
+                        <div class="answer-wrap aw">
+                            <p class="answer-text">{{ question['b'] }}</p>
+                        </div>
+                    </li>
+                    <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
+                        <div class="answer-wrap aw">
+                            <p class="answer-text">{{ question['c'] }}</p>
+                        </div>
+                    </li>
+                    <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
+                        <div class="answer-wrap aw">
+                            <p class="answer-text">{{ question['d'] }}</p>
+                        </div>
+                    </li>
+                </ul>
+                {% endfor %}
+                <div id="results" class="justify-content-center ul mt-0">
+                    <span class="results-inner li w-100">
+                        <!-- <div class="card cont">
+                            <div class="card-body mt-0"> -->
+                        <h3 class="text-white key">You are done with your quiz! Please enter your name and
+                            upload your
+                            picture</h3>
+                        <form action="/key" method="post" class="niform" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input name="name" class="form-control" type="text" placeholder="Input your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1" class="form-control-file-label text-white">Upload
+                                    your
+                                    picture</label>
+                                <input type="file" class="form-control-file form-control" name="file"
+                                    id="exampleFormControlFile1">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="key" id="key" value="">
+                            </div>
+                            <button type="submit" class="desc btn btn-outline-light mt-4">Generate Key</button>
+                        </form>
+                        <!-- </div>
+                        </div> -->
+                    </span>
                 </div>
-            </li>
-            <li class="quiz-answer li anli pr-2 pb-3" data-quizIndex="a">
-                <div class="answer-wrap">
-                    <p class="answer-text">{{ question['a'] }}</p>
-                </div>
-            </li>
-            <li class="quiz-answer li anli pl-2 pb-3" data-quizIndex="b">
-                <div class="answer-wrap">
-                    <p class="answer-text">{{ question['b'] }}</p>
-                </div>
-            </li>
-            <li class="quiz-answer li anli pr-2 pt-3" data-quizIndex="c">
-                <div class="answer-wrap">
-                    <p class="answer-text">{{ question['c'] }}</p>
-                </div>
-            </li>
-            <li class="quiz-answer li anli pl-2 pt-3" data-quizIndex="d">
-                <div class="answer-wrap">
-                    <p class="answer-text">{{ question['d'] }}</p>
-                </div>
-            </li>
-        </ul>
-    {% endfor %}
-    <ul id="results" class="justify-content-center ul">
-        <li class="results-inner li w-100">
-            <h6 class="display-2 text-white key">1111</h6>
-            <p>Use your unique personality key to see your squad twin.</p>
-            <Button class="desc btn btn-outline-light"><a href="/result">Click Here</a></Button>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     var quizSteps = $("#quizzie .quiz-step"),
@@ -96,6 +121,9 @@
     function updateStep(currentStep) {
         if (currentStep.hasClass("current")) {
             currentStep.removeClass("current");
+            setInterval(function () {
+
+            }, 3000);
             currentStep.next().addClass("current");
         }
     }
@@ -106,22 +134,19 @@
         if (quizSteps.find(".active").length == quizSteps.length) {
             $.ajax({
                 url: "/quiz",
-                data: {
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
                     answers: totalScore,
-                    name: $("#name").val()
-                },
+                    name: "" //$("#name").val()
+                }),
                 method: "POST",
-                success: function(key){
+                success: function (key) {
                     console.log("success")
-                    // var resultsTitle = $("#results p"),
-                    // resultsDesc = $("#results .desc");
-                    $(".key").text(key);
+                    $("#key").val(key);
                 }
-                
+
             });
-            
         }
     }
-
 </script>
 {% endblock %}
