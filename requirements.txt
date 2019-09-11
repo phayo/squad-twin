@@ -13,7 +13,7 @@ colorama==0.3.7
 command-not-found==0.3
 configobj==5.0.6
 constantly==15.1.0
-cryptography==2.1.4
+cryptography==2.3
 cs50==4.0.2
 distro-info===0.18ubuntu0.18.04.1
 execnet==1.7.1
