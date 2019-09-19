@@ -9,5 +9,5 @@ applications:
   domain: not-used.net
   host: not-used
   env:
-    FLASK_APP : server
+    FLASK_APP : app
     FLASK_DEBUG : false
