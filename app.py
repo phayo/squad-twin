@@ -35,9 +35,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 50
-    response.headers["Pragma"] = "no-cache"
+    # response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    # response.headers["Expires"] = 50
     return response
 
 
