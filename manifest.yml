@@ -5,7 +5,7 @@ applications:
   name: "Squad twin"
   buildpack: python_buildpack
   command: python manage.py start 0.0.0.0:$PORT
-  memory: 512M
+  memory: 128M
   domain: not-used.net
   host: not-used
   env:
